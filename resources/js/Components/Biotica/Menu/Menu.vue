@@ -123,7 +123,11 @@ watch(
         </el-sub-menu>
         <el-sub-menu index="4" v-if="hasPermisos('MnuBibliografia')">
             <template #title>Bibliografía</template>
-            <el-menu-item index="4-1" v-if="hasPermisos('MnuBiblioRef')">Referencias</el-menu-item>
+            <el-menu-item index="4-1" v-if="hasPermisos('MnuBiblioRef')">
+                <a href="/bibliografiasIndex" v-if="hasPermisos('MnuBiblioRef', 'Visible')">
+                  Referencias
+                </a>
+            </el-menu-item>
         </el-sub-menu>
     </el-menu>
 </template>

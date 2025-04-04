@@ -25,7 +25,7 @@ defineProps({
     type: Boolean,
     required: true
   },
-  onCloseModal: {  // <- Prop requerida
+  onClose: { 
     type: Function,
     required: true
   }
@@ -35,7 +35,7 @@ const emit = defineEmits(["close"]);
 
 const closeModal = () => {
   emit("close");
-  props.onCloseModal(); // Llama a la función que se pasa como prop
+  
 };
 
 </script>

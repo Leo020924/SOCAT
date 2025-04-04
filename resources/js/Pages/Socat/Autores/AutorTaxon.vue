@@ -99,9 +99,20 @@ const buscarPor = () => {
 };
 
 // Función para manejar el cambio de página en la paginación
-const handlePageChange = (page) => {
-    currentPage.value = page;
-    fetchFilteredData();
+const handlePageChange = (newPage) => {
+    axios.get('/bibliografias?page=' + newPage)
+        .then(response => {
+            localTableData.value = response.data.bibliografiaData.data;
+            total.value = response.data.bibliografiaData.totalItems;
+            currentPage.value = response.data.bibliografiaData.currentPage;
+            lastPage.value = response.data.bibliografiaData.lastPage;
+            nextPageUrl.value = response.data.bibliografiaData.nextPageUrl;
+            prevPageUrl.value = response.data.bibliografiaData.prevPageUrl;
+        })
+        .catch(error => {
+            console.error('Error al cargar la página:', error);
+            ElMessageBox.alert('Error al cargar la página.', 'Error', { type: 'error' });
+        });
 };
 
 const handleResultado = async (nuevoAutor) => {
@@ -112,8 +123,9 @@ const handleResultado = async (nuevoAutor) => {
 
 
 const cerrarModal = () => {
-    modalVisible.value = false
-}
+    modalVisible.value = false;
+};
+
 
 const props = defineProps({
     datosAutor: {
@@ -172,11 +184,11 @@ onMounted(() => {
                                             <p><strong>Id Autor Taxon:</strong> {{ props.row.IdAutorTaxon }}</p>
                                             <p><strong>Fecha de Modificación:</strong> {{
                                                 props.row.FechaModificacion
-                                                }}</p>
+                                            }}</p>
                                             <p><strong>Catalogo:</strong> {{ props.row.Catalogo }}</p>
                                             <p><strong>Nombre Autoridad Original:</strong> {{
                                                 props.row.NombreAutoridadOriginal
-                                                }}
+                                            }}
                                             </p>
                                         </div>
                                     </template>
@@ -188,22 +200,23 @@ onMounted(() => {
                                 <el-table-column prop="GrupoTaxonomico" label="Grupo Taxonómico" min-width="200"
                                     sortable="custom" align="center" class="hidden-sm-and-down"></el-table-column>
 
-                                    <el-table-column label="Acciones" width="120">
-                                <template #default="{ row }">
-                                    <div class="flex justify-around">
-                                        <EditarButton @editar="editarAutor(row)" />
-                                        <EliminarButton @eliminar="eliminarAutor(row.IdAutorTaxon)" />
-                                    </div>
-                                </template>
-                            </el-table-column>
-                                
+                                <el-table-column label="Acciones" width="120">
+                                    <template #default="{ row }">
+                                        <div class="flex justify-around">
+                                            <EditarButton @editar="editarAutor(row)" />
+                                            <EliminarButton @eliminar="eliminarAutor(row.IdAutorTaxon)" />
+                                        </div>
+                                    </template>
+                                </el-table-column>
+
                             </el-table>
                         </div>
                     </el-card>
+
+
                     <div v-if="totalItems > itemsPerPage" class="pagination-wrapper">
-                        <el-pagination :current-page="currentPage" :page-size="itemsPerPage"
-                            :total="totalItems" @current-change="handlePageChange"
-                            layout="prev, pager, next" background class="my-2">
+                        <el-pagination :current-page="currentPage" :page-size="itemsPerPage" :total="totalItems"
+                            @current-change="handlePageChange" layout="prev, pager, next" background class="my-2">
                             <template #prev>
                                 <el-button :disabled="!prevPageUrl" @click="handlePrevNext('prev')"
                                     size="small">Anterior</el-button>
@@ -222,10 +235,10 @@ onMounted(() => {
 
             <FormAutorTaxon :visible="modalVisible" :autTaxEdit="autorEditado"
                 :accion="autorEditado ? 'editar' : 'crear'" @resultadoAlta="handleResultado"
-                @resultadoEditar="handleResultado" @cerrar="cerrarModal" />
+                @resultadoEditar="handleResultado" :onCloseModal="cerrarModal" />
         </div>
-    
-</AppLayout>
+
+    </AppLayout>
 </template>
 
 <style scoped>
@@ -234,9 +247,9 @@ onMounted(() => {
     flex-direction: column;
     min-height: 100vh;
     background-color: #f0f2f5;
-    align-items: center; 
-    justify-content: flex-start; 
-    padding: 10px; 
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
     box-sizing: border-box;
 }
 
@@ -246,12 +259,12 @@ onMounted(() => {
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-    padding: 10px; 
+    padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 10px auto;
-    
+
 }
 
 .table-wrapper {
@@ -364,7 +377,7 @@ onMounted(() => {
 }
 
 @media (max-width: 768px) {
-   .app-container {
+    .app-container {
         padding: 5px;
     }
 

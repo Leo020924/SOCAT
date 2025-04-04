@@ -283,6 +283,7 @@ import AutorTaxon from '@/Pages/Socat/Autores/AutorTaxon.vue';
 
 const page = usePage();
 
+const nombreTaxon = ref(''); // Inicializamos con un string vacío
 
 const hasPermisos = (permiso, accion) => {
   const permisosData = page.props.permisos || [];
@@ -527,7 +528,7 @@ watch(
 
 watch(() => props.taxonAct, (newTaxonAct) => {
   // Actualizar los valores del formulario
-  nombreTax.value.nombreTaxon = newTaxonAct?.completo?.NombreCompleto || '';
+  nombreTaxon.value = props.taxonAct?.completo?.NombreCompleto || ''; // Asignamos el valor inicial
   nombreTax.value.nombreAutoridad = newTaxonAct?.completo?.NombreAutoridad || '';
   nombreTax.value.sistClassDicc = newTaxonAct?.completo?.SistClasCatDicc || '';
   nombreTax.value.citaNomenclatural = newTaxonAct?.completo?.CitaNomenclatural || '';

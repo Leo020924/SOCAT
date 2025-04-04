@@ -1,5 +1,5 @@
 <template>
-    <ModalGenerico :visible="visible" @close="cerrarModal">
+    <ModalGenerico :visible="visible" :onClose="onCloseModal">
         <el-card class="box-card">
             <div>
                 <el-form :model="autorTax" :rules="rules" ref="autorTaxFormRef">
@@ -65,7 +65,7 @@ const props = defineProps({
     accion: String,
     autTaxEdit: Object,
     paginaActual: Number,
-    onClose: Function, // <- Agrega onClose al props
+    onCloseModal: Function, // Prop para cerrar el modal
 });
 
 const emit = defineEmits(['cerrar', 'resultadoAlta', 'resultadoEditar', 'reload']); // <- Agrega 'reload'

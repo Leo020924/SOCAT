@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AutorTaxonController;
+use App\Http\Controllers\BibliografiaController;
 use App\Http\Controllers\CategoriaTaxonomicaController;
 use App\Http\Controllers\GraficasController;
 use App\Http\Controllers\GrupoTaxonomicoController;
@@ -44,7 +45,7 @@ Route::middleware([
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/generate-token', [TokenController::class, 'generateToken'])->name('generate.token');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/autores', [AutorTaxonController::class, 'index'])->name('autorTaxon.index');
     Route::get('/autores/create', [AutorTaxonController::class, 'create'])->name('autores.create');
     Route::post('/autores', [AutorTaxonController::class, 'store'])->name('autores.store');
@@ -72,7 +73,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/busca-tipo-distribucion', [TiposDistribucionController::class, 'buscaTipoDistribucion'])->name('buscaTipoDistribucion');
 
 
-
+    
+    
 
     Route::get('/nombres-comunes', [NombreComunController::class, 'index'])->name('nombresComunes.index');
     Route::get('/nombres-comunes/create', [NombreComunController::class, 'create'])->name('nombresComunes.create');
@@ -99,6 +101,13 @@ Route::middleware(['auth'])->group(function () {
      Route::get('/valCamEstatus', [NombresArbolController::class, 'validaCambio']);
 
 
+     //Rutas de la API para controlar la bibliografia y estas seran validadas por la autenticacion 
+    Route::get('/carga-Biblio', [BibliografiaController::class, 'fetchBibliografia'])->name('biblio.fetch');
+    Route::get('/busca-Biblio', [BibliografiaController::class, 'buscaBibliografia']);
+    Route::put('/bibliografias/{id}', [BibliografiaController::class, 'update'])->name('bibliografias.update');
+    Route::delete('/bibliografias/{id}', [BibliografiaController::class, 'destroy'])->name('bibliografias.destroy');
+    Route::get('/bibliografias-api', [BibliografiaController::class, 'indexApi'])->name('bibliografias.api');
+    Route::get('/bibliografiasIndex',[BibliografiaController::class, 'index'])->name('bibliografias.index');
 
      
 

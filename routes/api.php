@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AutorTaxonController;
+use App\Http\Controllers\BibliografiaController;
 use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\GraficasController;
 use App\Http\Controllers\GrupoTaxonomicoController;
@@ -68,4 +69,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Rutas de la API para controlar los nombres taxonomicos 
     Route::get('/cargar-catTax', [CategoriasController::class, 'fetchCatTax']);
     Route::get('/cargar-hijos-catTax/{id}', [CategoriasController::class, 'fetchHijos']);
+
+
+
+
+
+     //Rutas de la API para controlar la bibliografia y estas seran validadas por la autenticacion 
+     Route::get('/carga-Biblio', [BibliografiaController::class, 'fetchBibliografia'])->name('biblio.fetch');
+     Route::get('/busca-Biblio', [BibliografiaController::class, 'buscaBibliografia']);
+     Route::match(['put', 'post'], '/bibliografias/{id}', [BibliografiaController::class, 'update'])->name('bibliografias.update');
+     Route::delete('/borrar-biblio/{id}', [BibliografiaController::class, 'delete']);
+     Route::get('/bibliografias-api', [BibliografiaController::class, 'indexApi'])->name('bibliografias.api');
+ 
+     Route::get('/bibliografiasIndex',[BibliografiaController::class, 'index'])->name('bibliografias.index');
 });

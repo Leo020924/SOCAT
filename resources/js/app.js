@@ -9,6 +9,7 @@ import ElementPlus from 'element-plus';
 import es from 'element-plus/es/locale/lang/es';
 import 'element-plus/dist/index.css'; 
 
+
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
